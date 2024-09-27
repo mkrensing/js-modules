@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p dist
+tar -pczf ./dist/js-modules.tar.gz --exclude "dist" --exclude "build" ./*
