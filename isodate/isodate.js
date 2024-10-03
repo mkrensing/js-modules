@@ -4,7 +4,7 @@ export function getDateRange(listOfIsoDates) {
     const minDate = new Date(Math.min(...dates));
     const maxDate = new Date(Math.max(...dates));
 
-    return  { minDate: minDate.toISOString(), maxDate: maxDate.toISOString };
+    return  { minDate: minDate.toISOString(), maxDate: maxDate.toISOString() };
 }
 
 export function getMinDate(listOfIsoDates) {
