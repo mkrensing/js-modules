@@ -43,7 +43,16 @@ export class RestClient {
         })
     }
 
-    extendUrl(url, paramsObj) {
+    extendUrl(url, params) {
+        url = this.replaceUrlPlaceholders(url, params);
+        return this.addParameters(url, params);
+    }
+
+    replaceUrlPlaceholders(url, params) {
+        return url.replace(/{(\w+)}/g, (match, key) => params[key] || match);
+    }
+
+    addParameters(url, paramsObj) {
         const urlHasParams = url.includes('?'); // Prüfen, ob die URL bereits Parameter enthält
         const newParams = this.objectToUrlParams(paramsObj);
     

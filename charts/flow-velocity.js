@@ -84,7 +84,7 @@ export class FlowVelocityChart extends FlowChart {
 
     createEstimationTraces(data) {
 
-      if(! this.showEstimationBar) {
+      if(! this.estimationBar) {
         return [];
       }
 
