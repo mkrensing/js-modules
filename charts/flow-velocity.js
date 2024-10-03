@@ -31,25 +31,29 @@ export class FlowVelocityChart extends FlowChart {
         this.colors = config.colors || { count: 'blue', estimation: 'orange'};
         this.data = [];
         this.onClickHandler = null;
+        this.estimationBar = true;
     }
 
     setIterations(iterations) {
         this.iterations = iterations;
     }
 
+    setEstimationBar(showEstimationBar) {
+      this.estimationBar = showEstimationBar;
+    }
+
     createTraces(data) {
+
+      return [ ...this.createCountTraces(data), ...this.createEstimationTraces(data) ]
+    }
+
+    createCountTraces(data) {
 
         let countValues = this.iterations.map(iteration => {
             return data.filter(item => { return item.iteration == iteration })[0].count;
         });
         let countMedianValues = this.iterations.map((iteration, index) => {
             return median(countValues.slice(0, index+1)) ;
-        });
-        let estimationValues = this.iterations.map(iteration => {
-            return data.filter(item => { return item.iteration == iteration })[0].estimation;
-        });
-        let estimationMedianValues = this.iterations.map((iteration, index) => {
-            return median(estimationValues.slice(0, index+1)) ;
         });
 
         let velocityCountTrace =  {
@@ -74,29 +78,47 @@ export class FlowVelocityChart extends FlowChart {
             yaxis: "y2"
           };
 
-        let velocityEstimationTrace =  {
-            x: this.iterations,
-            y: estimationValues,
-            text: estimationValues.map(count => { return count + " SP" }),
-            textposition: 'auto',
-            name: "Estimation (SP)",
-            type: 'bar',
-            marker: { color: this.colors.estimation },
-          };
 
-        let velocityEstimationMedianTrace =  {
-            x: this.iterations,
-            y: estimationMedianValues,
-            text: estimationMedianValues.map(count => { return count + " SP" }),
-            textposition: 'auto',
-            hovertemplate: '%{text}',
-            name: "Median (SP)",
-            type: 'scatter',
-            mode: 'lines+markers'
+        return [ velocityCountTrace, velocityCountMedianTrace ];
+    }
+
+    createEstimationTraces(data) {
+
+      if(! this.showEstimationBar) {
+        return [];
+      }
+
+      let estimationValues = this.iterations.map(iteration => {
+          return data.filter(item => { return item.iteration == iteration })[0].estimation;
+      });
+      let estimationMedianValues = this.iterations.map((iteration, index) => {
+          return median(estimationValues.slice(0, index+1)) ;
+      });
+
+
+      let velocityEstimationTrace =  {
+          x: this.iterations,
+          y: estimationValues,
+          text: estimationValues.map(count => { return count + " SP" }),
+          textposition: 'auto',
+          name: "Estimation (SP)",
+          type: 'bar',
+          marker: { color: this.colors.estimation },
         };
 
-        return [ velocityCountTrace, velocityEstimationTrace, velocityCountMedianTrace, velocityEstimationMedianTrace];
-    }
+      let velocityEstimationMedianTrace =  {
+          x: this.iterations,
+          y: estimationMedianValues,
+          text: estimationMedianValues.map(count => { return count + " SP" }),
+          textposition: 'auto',
+          hovertemplate: '%{text}',
+          name: "Median (SP)",
+          type: 'scatter',
+          mode: 'lines+markers'
+      };
+
+      return [ velocityEstimationTrace, velocityEstimationMedianTrace];
+    }    
 
     update(data) {
         this.data = data;
