@@ -1,12 +1,12 @@
 export class RestClient {
 
-    getJson(url, headers) {
+    getJson(url, parameters, headers) {
         return new Promise((resolve, reject) => {
             let args = { method: 'GET', 
                 headers: 
                    { 'Content-Type': 'application/json', ...(headers || {}) }
                };            
-            fetch(url).then(response => {
+            fetch(this.extendUrl(url, parameters)).then(response => {
                 if (!response.ok) {
                     throw new Error('client.get failed for url ' + url + '. response: ' + response.text);
                 }
@@ -21,14 +21,14 @@ export class RestClient {
         })
     }
 
-    postJson(url, body, headers) {
+    postJson(url, parameters, body, headers) {
         return new Promise((resolve, reject) => {
             let args = { method: 'POST', 
                          headers: 
                             { 'Content-Type': 'application/json', ...(headers || {}) },
                          body: JSON.stringify(body || {})
                         };
-            fetch(url, args).then(response => {
+            fetch(this.extendUrl(url, parameters), args).then(response => {
                 if (!response.ok) {
                     throw new Error('client.get failed for url ' + url + '. response: ' + response.text);
                 }
@@ -43,5 +43,19 @@ export class RestClient {
         })
     }
 
+    extendUrl(url, paramsObj) {
+        const urlHasParams = url.includes('?'); // Prüfen, ob die URL bereits Parameter enthält
+        const newParams = this.objectToUrlParams(paramsObj);
+    
+        // Falls die URL schon Parameter hat, mit '&' erweitern, sonst mit '?'
+        return urlHasParams ? `${url}&${newParams}` : `${url}?${newParams}`;
+    }    
+
+    
+    objectToUrlParams(obj) {
+        return Object.entries(obj || {})
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+    }
     
 }
