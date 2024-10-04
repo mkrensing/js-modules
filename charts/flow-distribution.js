@@ -134,7 +134,7 @@ export class FlowDistributionChart extends FlowChart {
         this.onClickHandler = function(event) {
           var point = event.points[0];
           if (point !== undefined) {
-            var iterationName = point.x;
+            var iterationName = point.data.x[point.pointIndex];
             var typeName = point.data.name;
             handler(iterationName, typeName, _this.getIssuesForIterationAndType(iterationName, typeName));
           }

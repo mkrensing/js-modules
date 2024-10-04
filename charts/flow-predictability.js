@@ -137,7 +137,7 @@ export class FlowPredictabilityChart extends FlowChart {
         this.onClickHandler = function(event) {
           var point = event.points[0];
           if (point !== undefined) {
-            var iterationName = point.x;
+            var iterationName = point.data.x[point.pointIndex];
             var categoryName = point.data.name;
 
             handler(iterationName, categoryName, _this.getIssuesForIterationAndCategory(iterationName, categoryName));

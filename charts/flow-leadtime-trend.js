@@ -216,7 +216,7 @@ export class LeadTimeTrendChart extends FlowChart {
         this.onClickHandler = function(event) {
           var point = event.points[0];
           if (point !== undefined) {
-            let iterationName = point.x;
+            let iterationName = point.data.x[point.pointIndex];
             let categoryName = point.data.name;
             let issues  = [];
 

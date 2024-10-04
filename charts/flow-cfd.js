@@ -197,7 +197,7 @@ export class CumulativeFlowDiagram extends FlowChart {
 
               var point = event.points[0];
               if (point !== undefined) {
-                var iteration = point.x;
+                var iteration = point.data.x[point.pointIndex];
                 var category = point.data.name;
                 handler(iteration, category, _this.getItemsForIterationAndCategory(iteration, category));
               }

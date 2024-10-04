@@ -307,8 +307,9 @@ export class LeadTimeChart extends FlowChart {
         this.onClickHandler = function(event) {
           var point = event.points[0];
           if (point !== undefined) {
-            let items=_this.getItemsForVisibleTraces(point.x);
-            handler(point.x, items);
+            var x = point.data.x[point.pointIndex];
+            let items=_this.getItemsForVisibleTraces(x);
+            handler(x, items);
           }
         }
     }
