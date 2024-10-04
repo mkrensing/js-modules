@@ -31,13 +31,18 @@ export function getMonthsBetweenDates(startDateStr, endDateStr) {
     let currentDate = new Date(startDate);
 
     while (currentDate <= endDate) {
-        // Format: "YYYY-MM"
         const month = currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0');
         months.push(month);
 
-        // Zum nächsten Monat springen
         currentDate.setMonth(currentDate.getMonth() + 1);
     }
 
     return months;
+}
+
+export function getLastDayOfMonth(isoDateString) {
+    let date = new Date(isoDateString);
+    let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    return lastDay.toISOString().split('T')[0];
 }

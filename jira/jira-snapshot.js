@@ -1,7 +1,9 @@
-export function createSnapshots(historyIssues, timestamps) {
+export function createSnapshots(historyIssues, timestamps, timestampConverter) {
+    timestampConverter = timestampConverter || function(timestamp) { return timestamp };
     return createIndexOfListWithUniqueKeys(timestamps.map(timestamp => {
-        let snapshotsForTimestamp=historyIssues.filter(issue => issue.created <= timestamp).map(issue => {
-             return createSnapshot(issue, timestamp);
+        let convertedTimestamp = timestampConverter(timestamp);
+        let snapshotsForTimestamp=historyIssues.filter(issue => issue.created <= convertedTimestamp).map(issue => {
+             return createSnapshot(issue, convertedTimestamp);
         });
         return { [timestamp]: snapshotsForTimestamp};
     }));
