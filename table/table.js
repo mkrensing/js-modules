@@ -1,8 +1,6 @@
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
 import $ from 'jquery'
- 
 class Table {
- 
     constructor(targetSelector, options) {
         this.targetSelector = targetSelector
         this.tabulatorTable = new Tabulator(targetSelector, {
@@ -11,31 +9,33 @@ class Table {
             ...options });
     }
  
+    init(data) {
+        var _this=this;
+        this.tabulatorTable.on("tableBuilt", function() {
+            _this.update(data);
+        });
+    }
+ 
     update(data) {
         this.tabulatorTable.setData(data)
         this.tabulatorTable.redraw();
     }
- 
     toggle(data, dataSetId) {
         let $targetElement = $(this.targetSelector);
- 
         if($targetElement.attr('dataSetId') == dataSetId) {
             $targetElement.attr('dataSetId', "");
             $targetElement.hide();
- 
         } else {
             $targetElement.show();
             $targetElement.attr('dataSetId', dataSetId);
-           this.update(data);
+            this.update(data)
         }
     }
 }
  
- 
 function isoDate(options) {
     return {sorter:isoDateSorter, formatter:isoDateFormatter, ...options }
 }
- 
 function linkFormatter(urlTemplate) {
     return function(cell, formatterParams) {
         var value = cell.getValue();
@@ -43,13 +43,11 @@ function linkFormatter(urlTemplate) {
         return `<a href='${url}' target='_details_${value}' >${value}</a>`
     }
 }
- 
 function values() {
     return function(values, data) {
         return values;
     }
 }
- 
 function totalLinkFormatter(urlTemplate, separator) {
     separator = separator || "";
     return function(cell, formatterParams) {
@@ -59,40 +57,31 @@ function totalLinkFormatter(urlTemplate, separator) {
         return `<a href='${url}' target='total_details' >${ label}</a>`
     }
 }
- 
 function isoDateSorter(a, b, aRow, bRow, column, dir, sorterParams) {
     return a.localeCompare(b);
 }
- 
 function isoDateFormatter(cell, formatterParams) {
- 
     var isoDate = cell.getValue();
     var date = new Date(isoDate);
- 
     var options = { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'};
     var formatter = new Intl.DateTimeFormat('de-DE', options);
     var value = formatter.format(date);
     value = value.split(",").join("");
     return value;
 }
- 
 function chained(formatters) {
- 
     function rebuildCell(cell, value) {
         cell.getValue = function() {
             return value;
         }
- 
         return cell;
     }
- 
     return function(cell, formatterParams) {
         let chainedvalue = formatters.reduce((accumulator, formatter) => formatter(rebuildCell(cell, accumulator)), cell.getValue());
         console.log("chainedvalue", chainedvalue);
         return chainedvalue;
     }
 }
- 
  
 var table = {
     Table: Table,

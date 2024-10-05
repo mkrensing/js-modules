@@ -10,6 +10,13 @@ export function getLeadtime(historyIssues, startStateConfiguration, endStateConf
     });
 }
 
+export function getTimestamp(historyIssue, startStateConfiguration) {
+    let startState = createStateConfigurationObject(startStateConfiguration);
+    let startTimestamp = findTimestamp(historyIssue, startState.propertyName, startState.value, 0);
+ 
+    return startTimestamp
+}
+
 function findTimestamp(historyIssue, propertyName, propertyValue, arrayIndex) {
     if(typeof propertyValue === 'function') {
         return findTimestampByFunction(historyIssue, propertyName, propertyValue, arrayIndex);
