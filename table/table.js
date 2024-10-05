@@ -58,10 +58,13 @@ function totalLinkFormatter(urlTemplate, separator) {
     }
 }
 function isoDateSorter(a, b, aRow, bRow, column, dir, sorterParams) {
-    return a.localeCompare(b);
+    return (a || "").localeCompare(b || "");
 }
 function isoDateFormatter(cell, formatterParams) {
     var isoDate = cell.getValue();
+    if(! isoDate) {
+        return "";
+    }
     var date = new Date(isoDate);
     var options = { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'};
     var formatter = new Intl.DateTimeFormat('de-DE', options);
