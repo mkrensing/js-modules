@@ -46,3 +46,16 @@ export function getLastDayOfMonth(isoDateString) {
 
     return lastDay.toISOString().split('T')[0];
 }
+
+export function getLeadTimeInDays(start, end) {
+ 
+    if(! start) {
+        return "";
+    }
+ 
+    const oneDay = 24 * 60 * 60 * 1000;
+    end = end || new Date().toISOString();
+    var diff = Math.abs(new Date(end) - new Date(start));
+ 
+    return Math.round(diff / oneDay)
+}
