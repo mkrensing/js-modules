@@ -88,13 +88,12 @@ export class RestClient {
 function createErrorPromise(urlTemplate, response) {
     return new Promise((resolve, reject) => {
         return response.text().then(text => {
-            reject({ error: {
-                    urlTemplate: urlTemplate,
-                    url: response.url,
-                    status: response.status,
-                    text: text
-                }
-            });                        
+            reject({
+                urlTemplate: urlTemplate,
+                url: response.url,
+                statusCode: response.status,
+                text: text
+            });                       
         });
     });
 }
