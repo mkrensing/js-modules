@@ -29,7 +29,7 @@ function humanReadableDate(text, render) {
     return formatDate(date);
 }
 
-function render(templateId, targetSelector, data) {
+function render(templateId, targetSelector, data, append=false) {
 
     let templateElement = document.getElementById(templateId);
     if(! templateElement) {
@@ -39,7 +39,12 @@ function render(templateId, targetSelector, data) {
 	let context = { ...data, ...defaultLambdas };
 
 	let rendered = mustache.render(template, context );
-	$(targetSelector).html(rendered);
+    if(append) {
+        $(targetSelector).append(rendered);
+    } else {
+        $(targetSelector).html(rendered);
+    }
+
 }
 
 var templating = {
