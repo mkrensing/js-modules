@@ -79,9 +79,10 @@ export class RestClient {
     
     objectToUrlParams(obj) {
         return Object.entries(obj || {})
-            .map(([key, values]) => ensureArray(values).flatMap(value => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-            .join('&'));
+            .flatMap(([key, values]) => ensureArray(values).flatMap(value => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`))
+            .join('&');
     }
+    
     
 }
 
